@@ -1,44 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>MithiScan – River Pollution Monitoring Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
 </head>
+
 <body>
 
-  <h1>MithiScan – River Pollution Monitoring Dashboard</h1>
-  <p class="subtitle">
-    Visualizing river water quality data from the Mithi River monitoring system.
-  </p>
+<h1>MithiScan – River Pollution Monitoring Dashboard</h1>
+<p class="subtitle">
+Heatmap-based visualization of river pollution hotspots with multi-parameter analysis.
+</p>
 
-  <h2>Latest Sensor Readings</h2>
-  <table id="data-table">
-    <thead>
-      <tr>
-        <th>Timestamp</th>
-        <th>pH</th>
-        <th>Turbidity</th>
-        <th>Temperature (°C)</th>
-        <th>Conductivity</th>
-        <th>Latitude</th>
-        <th>Longitude</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<div id="statusBox" class="status-box">
+Loading data…
+</div>
 
-  <h2>pH vs Time</h2>
-  <canvas id="phChart"></canvas>
+<h2>Sensor Readings</h2>
+<table id="dataTable">
+  <thead>
+    <tr>
+      <th>Timestamp</th>
+      <th>pH</th>
+      <th>Turbidity</th>
+      <th>Temperature</th>
+      <th>Conductivity</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
-  <h2>Turbidity vs Time</h2>
-  <canvas id="turbidityChart"></canvas>
+<h2>Pollution Hotspots (Heatmap)</h2>
+<div id="map"></div>
 
-  <footer>
-    Data shown is from simulated sensor inputs used to validate the software pipeline prior to hardware deployment.
-  </footer>
+<h2>Parameter Trends Over Time</h2>
+<canvas id="turbidityChart"></canvas>
+<canvas id="temperatureChart"></canvas>
+<canvas id="conductivityChart"></canvas>
+<canvas id="phChart"></canvas>
 
-  <script src="script.js"></script>
+<footer>
+MithiScan MVP – Heatmap-based spatial and temporal pollution analysis.
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
