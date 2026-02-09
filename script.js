@@ -83,6 +83,11 @@ function initHeatmap(readings) {
     blur: 18,
     maxZoom: 17
   }).addTo(map);
+
+  setTimeout(() => {
+  map.invalidateSize();
+}, 500);
+
 }
 
 loadData();
