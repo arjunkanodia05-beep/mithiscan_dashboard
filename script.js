@@ -11,9 +11,11 @@ async function loadData() {
   readings.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
   populateTable(readings);
-  updateStatus(readings[readings.length - 1]);
+  document.getElementById("latestValue").innerText =
+    readings[readings.length - 1].turbidity;
+
+  initMap(readings);
   drawCharts(readings);
-  initHeatmap(readings);
 }
 
 function populateTable(readings) {
@@ -33,61 +35,68 @@ function populateTable(readings) {
   });
 }
 
-function updateStatus(latest) {
-  const box = document.getElementById("statusBox");
-  box.textContent =
-    `Latest turbidity reading: ${latest.turbidity} (used for hotspot intensity)`;
+function initMap(readings) {
+  const center = readings[0];
+
+  map = L.map("map").setView([center.latitude, center.longitude], 14);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+  const heatData = readings.map(r => [
+    r.latitude,
+    r.longitude,
+    r.turbidity / 800
+  ]);
+
+  L.heatLayer(heatData, {
+    radius: 35,
+    blur: 25,
+    maxZoom: 17
+  }).addTo(map);
+
+  // Glow circles (guaranteed visible)
+  readings.forEach(r => {
+    L.circle([r.latitude, r.longitude], {
+      radius: 80,
+      color: r.turbidity > 500 ? "red" :
+             r.turbidity > 350 ? "orange" : "green",
+      fillOpacity: 0.3
+    }).addTo(map);
+  });
+
+  setTimeout(() => map.invalidateSize(), 500);
 }
 
 function drawCharts(readings) {
   const labels = readings.map(r => r.timestamp);
 
-  makeChart("turbidityChart", "Turbidity", readings.map(r => r.turbidity));
-  makeChart("temperatureChart", "Temperature (°C)", readings.map(r => r.temperature));
-  makeChart("conductivityChart", "Conductivity", readings.map(r => r.conductivity));
-  makeChart("phChart", "pH", readings.map(r => r.pH));
+  makeChart("turbidityChart", "Turbidity", readings.map(r => r.turbidity), "#ef4444");
+  makeChart("temperatureChart", "Temperature", readings.map(r => r.temperature), "#22d3ee");
+  makeChart("conductivityChart", "Conductivity", readings.map(r => r.conductivity), "#a78bfa");
+  makeChart("phChart", "pH", readings.map(r => r.pH), "#34d399");
 }
 
-function makeChart(canvasId, label, data) {
-  new Chart(document.getElementById(canvasId), {
+function makeChart(id, label, data, color) {
+  new Chart(document.getElementById(id), {
     type: "line",
     data: {
-      labels: labels,
+      labels: data.map((_, i) => i + 1),
       datasets: [{
         label: label,
         data: data,
-        borderWidth: 2,
-        fill: false
+        borderColor: color,
+        borderWidth: 3,
+        tension: 0.3
       }]
+    },
+    options: {
+      plugins: { legend: { labels: { color: "#e2e8f0" } } },
+      scales: {
+        x: { ticks: { color: "#e2e8f0" } },
+        y: { ticks: { color: "#e2e8f0" } }
+      }
     }
   });
-}
-
-function initHeatmap(readings) {
-  const first = readings[0];
-
-  map = L.map("map").setView([first.latitude, first.longitude], 13);
-
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap contributors"
-  }).addTo(map);
-
-  const heatPoints = readings.map(r => [
-    r.latitude,
-    r.longitude,
-    r.turbidity / 600   // normalize intensity
-  ]);
-
-  L.heatLayer(heatPoints, {
-    radius: 25,
-    blur: 18,
-    maxZoom: 17
-  }).addTo(map);
-
-  setTimeout(() => {
-  map.invalidateSize();
-}, 500);
-
 }
 
 loadData();

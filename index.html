@@ -6,7 +6,7 @@
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -15,42 +15,49 @@
 
 <body>
 
-<h1>MithiScan – River Pollution Monitoring Dashboard</h1>
-<p class="subtitle">
-Heatmap-based visualization of river pollution hotspots with multi-parameter analysis.
-</p>
+<header>
+  <h1>MithiScan</h1>
+  <p>River Pollution Monitoring & Hotspot Analysis System</p>
+</header>
 
-<div id="statusBox" class="status-box">
-Loading data…
-</div>
+<section class="status">
+  Latest Turbidity Reading:
+  <span id="latestValue">Loading...</span>
+</section>
 
-<h2>Sensor Readings</h2>
-<table id="dataTable">
-  <thead>
-    <tr>
-      <th>Timestamp</th>
-      <th>pH</th>
-      <th>Turbidity</th>
-      <th>Temperature</th>
-      <th>Conductivity</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+<section>
+  <h2>Pollution Hotspots</h2>
+  <div id="map"></div>
+</section>
 
-<h2>Pollution Hotspots (Heatmap)</h2>
-<div id="map"></div>
+<section>
+  <h2>Water Quality Trends</h2>
+  <canvas id="turbidityChart"></canvas>
+  <canvas id="temperatureChart"></canvas>
+  <canvas id="conductivityChart"></canvas>
+  <canvas id="phChart"></canvas>
+</section>
 
-<h2>Parameter Trends Over Time</h2>
-<canvas id="turbidityChart"></canvas>
-<canvas id="temperatureChart"></canvas>
-<canvas id="conductivityChart"></canvas>
-<canvas id="phChart"></canvas>
+<section>
+  <h2>Raw Sensor Data</h2>
+  <table id="dataTable">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>pH</th>
+        <th>Turbidity</th>
+        <th>Temp</th>
+        <th>Conductivity</th>
+        <th>Lat</th>
+        <th>Lon</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
 
 <footer>
-MithiScan MVP – Heatmap-based spatial and temporal pollution analysis.
+  MithiScan MVP – Spatial and Temporal Environmental Intelligence
 </footer>
 
 <script src="script.js"></script>
