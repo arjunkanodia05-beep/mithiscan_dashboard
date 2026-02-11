@@ -98,5 +98,10 @@ function makeChart(id, label, data, color) {
     }
   });
 }
+window.addEventListener("load", function () {
+  setTimeout(function () {
+    map.invalidateSize();
+  }, 300);
+});
 
 loadData();
