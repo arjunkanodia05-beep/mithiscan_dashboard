@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>MithiScan – River Pollution Monitoring Dashboard</title>
+  <title>MithiScan Dashboard</title>
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet"
@@ -15,55 +15,39 @@
 
 <body>
 
-<header>
-  <h1>MithiScan</h1>
-  <p>River Pollution Monitoring & Hotspot Analysis System</p>
-  <div class="system-indicator">
-    System Status:
-    <span id="systemStatus">Loading...</span>
-  </div>
-</header>
+<h1>MithiScan – River Pollution Monitoring</h1>
 
-<section class="status">
-  Latest Turbidity Reading:
-  <span id="latestValue">Loading...</span>
-</section>
+<div id="statusBox">
+  System Status:
+  <span id="systemStatus">Loading...</span>
+</div>
 
-<section>
-  <h2>Pollution Hotspots</h2>
-  <div id="map"></div>
-</section>
+<h2>Pollution Hotspots</h2>
+<div id="map"></div>
 
-<section>
-  <h2>Water Quality Trends</h2>
-  <canvas id="turbidityChart"></canvas>
-  <canvas id="temperatureChart"></canvas>
-  <canvas id="conductivityChart"></canvas>
-  <canvas id="phChart"></canvas>
-</section>
+<h2>Water Quality Trends</h2>
+<canvas id="turbidityChart"></canvas>
+<canvas id="temperatureChart"></canvas>
+<canvas id="conductivityChart"></canvas>
+<canvas id="phChart"></canvas>
 
-<section>
-  <h2>Raw Sensor Data</h2>
-  <table id="dataTable">
-    <thead>
-      <tr>
-        <th>Time</th>
-        <th>pH</th>
-        <th>Turbidity</th>
-        <th>Temp</th>
-        <th>Conductivity</th>
-        <th>Lat</th>
-        <th>Lon</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</section>
-
-<footer>
-  MithiScan MVP – Spatial and Temporal Environmental Intelligence
-</footer>
+<h2>Raw Sensor Data</h2>
+<table id="dataTable">
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th>pH</th>
+      <th>Turbidity</th>
+      <th>Temp</th>
+      <th>Conductivity</th>
+      <th>Lat</th>
+      <th>Lon</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
 <script src="script.js"></script>
+
 </body>
 </html>

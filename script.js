@@ -1,56 +1,55 @@
-const DATABASE_URL =
-  "https://mithiscan-default-rtdb.asia-southeast1.firebasedatabase.app";
+const DB =
+"https://mithiscan-default-rtdb.asia-southeast1.firebasedatabase.app";
 
-let map = L.map("map").setView([19.085, 72.875], 13);
+// MAP
+const map = L.map("map").setView([19.085, 72.875], 13);
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap contributors"
-}).addTo(map);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+.addTo(map);
 
 let heatLayer;
 
-function loadSystemStatus() {
-  fetch(`${DATABASE_URL}/system_status.json`)
-    .then(res => res.json())
+// LOAD STATUS
+function loadStatus() {
+  fetch(DB + "/system_status.json")
+    .then(r => r.json())
     .then(status => {
       const el = document.getElementById("systemStatus");
+
       if (status === "ON") {
         el.textContent = "ONLINE";
-        el.style.color = "#00ff88";
+        el.style.color = "lime";
       } else {
         el.textContent = "OFFLINE";
-        el.style.color = "#ff4444";
+        el.style.color = "red";
       }
-    })
-    .catch(() => {
-      document.getElementById("systemStatus").textContent = "UNKNOWN";
     });
 }
 
-function loadSensorData() {
-  fetch(`${DATABASE_URL}/sensor_readings.json`)
-    .then(res => res.json())
+// LOAD SENSOR DATA
+function loadData() {
+  fetch(DB + "/sensor_readings.json")
+    .then(r => r.json())
     .then(data => {
+
       if (!data) return;
 
       const readings = Object.values(data);
 
-      readings.sort((a, b) =>
-        new Date(a.timestamp) - new Date(b.timestamp)
+      // REMOVE invalid objects
+      const valid = readings.filter(r =>
+        r.timestamp &&
+        r.pH !== undefined &&
+        r.turbidity !== undefined &&
+        r.temperature !== undefined &&
+        r.conductivity !== undefined &&
+        r.latitude !== undefined &&
+        r.longitude !== undefined
       );
 
-      const timestamps = readings.map(r => r.timestamp);
-      const turbidity = readings.map(r => r.turbidity);
-      const temperature = readings.map(r => r.temperature);
-      const conductivity = readings.map(r => r.conductivity);
-      const ph = readings.map(r => r.pH);
-
-      document.getElementById("latestValue").textContent =
-        turbidity[turbidity.length - 1];
-
-      buildTable(readings);
-      buildCharts(timestamps, turbidity, temperature, conductivity, ph);
-      buildHeatmap(readings);
+      buildTable(valid);
+      buildCharts(valid);
+      buildHeatmap(valid);
     });
 }
 
@@ -59,7 +58,7 @@ function buildTable(readings) {
   tbody.innerHTML = "";
 
   readings.forEach(r => {
-    const row = `
+    tbody.innerHTML += `
       <tr>
         <td>${r.timestamp}</td>
         <td>${r.pH}</td>
@@ -70,82 +69,90 @@ function buildTable(readings) {
         <td>${r.longitude}</td>
       </tr>
     `;
-    tbody.innerHTML += row;
   });
 }
 
-function buildCharts(t, turb, temp, cond, ph) {
-  new Chart(document.getElementById("turbidityChart"), {
-    type: "line",
-    data: {
-      labels: t,
-      datasets: [{
-        label: "Turbidity",
-        data: turb,
-        borderColor: "#ff6384",
-        tension: 0.3
-      }]
-    }
-  });
+function buildCharts(readings) {
 
-  new Chart(document.getElementById("temperatureChart"), {
-    type: "line",
-    data: {
-      labels: t,
-      datasets: [{
-        label: "Temperature",
-        data: temp,
-        borderColor: "#36a2eb",
-        tension: 0.3
-      }]
-    }
-  });
+  const labels = readings.map(r => r.timestamp);
 
-  new Chart(document.getElementById("conductivityChart"), {
-    type: "line",
-    data: {
-      labels: t,
-      datasets: [{
-        label: "Conductivity",
-        data: cond,
-        borderColor: "#4bc0c0",
-        tension: 0.3
-      }]
+  new Chart(
+    document.getElementById("turbidityChart"),
+    {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: "Turbidity",
+          data: readings.map(r => r.turbidity),
+          borderColor: "red"
+        }]
+      }
     }
-  });
+  );
 
-  new Chart(document.getElementById("phChart"), {
-    type: "line",
-    data: {
-      labels: t,
-      datasets: [{
-        label: "pH",
-        data: ph,
-        borderColor: "#ff9f40",
-        tension: 0.3
-      }]
+  new Chart(
+    document.getElementById("temperatureChart"),
+    {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: "Temperature",
+          data: readings.map(r => r.temperature),
+          borderColor: "orange"
+        }]
+      }
     }
-  });
+  );
+
+  new Chart(
+    document.getElementById("conductivityChart"),
+    {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: "Conductivity",
+          data: readings.map(r => r.conductivity),
+          borderColor: "blue"
+        }]
+      }
+    }
+  );
+
+  new Chart(
+    document.getElementById("phChart"),
+    {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: "pH",
+          data: readings.map(r => r.pH),
+          borderColor: "green"
+        }]
+      }
+    }
+  );
 }
 
 function buildHeatmap(readings) {
+
   const heatData = readings.map(r => [
     r.latitude,
     r.longitude,
     r.turbidity / 500
   ]);
 
-  if (heatLayer) {
-    map.removeLayer(heatLayer);
-  }
+  if (heatLayer) map.removeLayer(heatLayer);
 
   heatLayer = L.heatLayer(heatData, {
-    radius: 30,
-    blur: 20
+    radius: 30
   }).addTo(map);
 
   map.invalidateSize();
 }
 
-loadSystemStatus();
-loadSensorData();
+loadStatus();
+loadData();

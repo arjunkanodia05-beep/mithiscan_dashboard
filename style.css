@@ -1,81 +1,31 @@
-/* Global Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Arial, sans-serif;
-}
-
-/* Background */
 body {
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  color: #ffffff;
-  padding: 30px;
+  background: #0f1b2a;
+  color: white;
+  font-family: Arial;
+  padding: 20px;
 }
 
-/* Header */
-header {
+h1, h2 {
   text-align: center;
-  margin-bottom: 30px;
 }
 
-header h1 {
-  font-size: 2.5rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-
-header p {
-  margin-top: 8px;
-  font-size: 1rem;
-  opacity: 0.8;
-}
-
-/* Status Section */
-.status {
-  background: rgba(255, 255, 255, 0.08);
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 25px;
-  font-size: 1rem;
-  backdrop-filter: blur(6px);
-}
-
-/* Section Styling */
-section {
-  margin-bottom: 40px;
-}
-
-h2 {
-  margin-bottom: 15px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-}
-
-/* Map */
 #map {
-  height: 500px;      /* CRITICAL FIX */
-  width: 100%;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.2);
-}
-
-/* Charts */
-canvas {
-  background: rgba(255, 255, 255, 0.05);
+  height: 400px;
+  margin-bottom: 40px;
   border-radius: 10px;
-  padding: 10px;
-  margin-bottom: 25px;
 }
 
-/* Table */
+canvas {
+  margin-bottom: 40px;
+  background: #1b2d3f;
+  padding: 10px;
+  border-radius: 10px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  overflow: hidden;
+  background: #1b2d3f;
 }
 
 th, td {
@@ -84,33 +34,11 @@ th, td {
 }
 
 th {
-  background: rgba(255, 255, 255, 0.1);
-  font-weight: 500;
+  background: #243a52;
 }
 
-tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.03);
-}
-
-tr:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transition: 0.2s ease;
-}
-
-/* Footer */
-footer {
+#statusBox {
   text-align: center;
-  margin-top: 40px;
-  font-size: 0.9rem;
-  opacity: 0.6;
-}
-
-/* Smooth animation */
-section, header {
-  animation: fadeIn 0.8s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  margin-bottom: 20px;
+  font-weight: bold;
 }
